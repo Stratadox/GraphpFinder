@@ -26,7 +26,7 @@ final class AdaptedNetwork implements Network
 
     public function all(): Labels
     {
-        return Ids::consistingOf(...$this->graph->getVertices()->getIds());
+//        return Ids::consistingOf(...$this->graph->getVertices()->getIds());
     }
 
     public function neighboursOf(string $node): Labels
@@ -46,19 +46,19 @@ final class AdaptedNetwork implements Network
 
     public function areNeighbours(string $source, string $neighbour): bool
     {
-//        try {
-//            $start = $this->graph->getVertices()->getVertexId($source);
-//        } catch (OutOfBoundsException $e) {
-//            // no source node, no neighbours
-//            return false;
-//        }
-//        /** @var Edge $edge */
-//        foreach ($start->getEdgesOut() as $edge) {
-//            if ((string) $edge->getVertexToFrom($start)->getId() === $neighbour) {
-//                return true;
-//            }
-//        }
-//        return false;
+        try {
+            $start = $this->graph->getVertices()->getVertexId($source);
+        } catch (OutOfBoundsException $e) {
+            // no source node, no neighbours
+            return false;
+        }
+        /** @var Edge $edge */
+        foreach ($start->getEdgesOut() as $edge) {
+            if ((string) $edge->getVertexToFrom($start)->getId() === $neighbour) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function has(string $node): bool
