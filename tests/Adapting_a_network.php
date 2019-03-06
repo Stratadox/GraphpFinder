@@ -6,6 +6,7 @@ use Fhaculty\Graph\Graph;
 use PHPUnit\Framework\TestCase;
 use Stratadox\GraphpFinder\AdaptedNetwork;
 use Stratadox\Pathfinder\DynamicPathfinder;
+use Stratadox\Pathfinder\FloydWarshallIndexer;
 use Stratadox\Pathfinder\NoPathAvailable;
 
 /**
@@ -97,6 +98,50 @@ class Adapting_a_network extends TestCase
         $this->assertSame(['A', 'B'], $shortestPathFromA['B']);
         $this->assertSame(['A', 'C'], $shortestPathFromA['C']);
         $this->assertSame(['A', 'C', 'D'], $shortestPathFromA['D']);
+    }
+
+    /** @test */
+    function building_an_index_of_the_graph()
+    {
+        $graph = new Graph();
+        $a = $graph->createVertex('A');
+        $b = $graph->createVertex('B');
+        $c = $graph->createVertex('C');
+        $d = $graph->createVertex('D');
+
+        $a->createEdge($b)->setWeight(5);
+        $a->createEdge($c)->setWeight(8);
+        $b->createEdge($d)->setWeight(9);
+        $c->createEdge($d)->setWeight(4);
+
+        $index = FloydWarshallIndexer::operatingIn(
+            AdaptedNetwork::from($graph)
+        )->allShortestPaths();
+
+        $this->assertEquals('B', $index->nextStepOnTheRoadBetween('A', 'B'));
+        $this->assertEquals('C', $index->nextStepOnTheRoadBetween('A', 'D'));
+    }
+
+    /** @test */
+    function building_an_informed_heuristic_from_indexed_graph()
+    {
+        $graph = new Graph();
+        $a = $graph->createVertex('A');
+        $b = $graph->createVertex('B');
+        $c = $graph->createVertex('C');
+        $d = $graph->createVertex('D');
+
+        $a->createEdge($b)->setWeight(5);
+        $a->createEdge($c)->setWeight(8);
+        $b->createEdge($d)->setWeight(9);
+        $c->createEdge($d)->setWeight(4);
+
+        $heuristic = FloydWarshallIndexer::operatingIn(
+            AdaptedNetwork::from($graph)
+        )->heuristic();
+
+        $this->assertEquals(5, $heuristic->estimate('A', 'B'));
+        $this->assertEquals(12, $heuristic->estimate('A', 'D'));
     }
 
     /** @test */

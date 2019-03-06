@@ -26,7 +26,7 @@ final class AdaptedNetwork implements Network
 
     public function all(): Labels
     {
-//        return Ids::consistingOf(...$this->graph->getVertices()->getIds());
+        return Ids::consistingOf(...$this->graph->getVertices()->getIds());
     }
 
     public function neighboursOf(string $node): Labels
