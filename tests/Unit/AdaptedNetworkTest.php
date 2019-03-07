@@ -73,7 +73,7 @@ class AdaptedNetworkTest extends TestCase
         $graph = new Graph();
         $a = $graph->createVertex('A');
         $edge = $a->createEdge($a);
-        $edge->setWeight(1);
+        $edge->setWeight(0);
 
         $environment = AdaptedNetwork::from($graph);
 

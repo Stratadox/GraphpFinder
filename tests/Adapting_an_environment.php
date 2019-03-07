@@ -168,6 +168,44 @@ class Adapting_an_environment extends TestCase
     }
 
     /** @test */
+    function finding_paths_through_a_directed_2d_multi_graph_with_numeric_ids()
+    {
+        $graph = new Graph();
+        $a = $graph->createVertex(1);
+        $a->setAttribute('x', 0);
+        $a->setAttribute('y', 0);
+        $b = $graph->createVertex(2);
+        $b->setAttribute('x', 4);
+        $b->setAttribute('y', 1);
+        $c = $graph->createVertex(3);
+        $c->setAttribute('x', 0);
+        $c->setAttribute('y', 8);
+        $d = $graph->createVertex(4);
+        $d->setAttribute('x', 5);
+        $d->setAttribute('y', 10);
+
+        $a->createEdge($b)->setWeight(5);
+        $a->createEdge($c)->setWeight(8);
+        $a->createEdge($c)->setWeight(15);
+        $b->createEdge($d)->setWeight(9);
+        $c->createEdge($d)->setWeight(4);
+
+        $shortestPath = DynamicPathfinder::operatingIn(
+            AdaptedEnvironment::from($graph)
+        );
+
+        $this->assertEquals([1, 3, 4], $shortestPath->between('1', '4'));
+        $this->assertEquals([4, 3, 1], $shortestPath->between('4', '1'));
+
+        $shortestPathFromA = $shortestPath->from('1');
+
+        $this->assertCount(3, $shortestPathFromA);
+        $this->assertEquals([1, 2], $shortestPathFromA[2]);
+        $this->assertEquals([1, 3], $shortestPathFromA[3]);
+        $this->assertEquals([1, 3, 4], $shortestPathFromA[4]);
+    }
+
+    /** @test */
     function building_an_index_of_the_graph()
     {
         $graph = new Graph();

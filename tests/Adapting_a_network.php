@@ -46,6 +46,37 @@ class Adapting_a_network extends TestCase
     }
 
     /** @test */
+    function finding_paths_through_a_simple_undirected_graph_with_numeric_ids()
+    {
+        $graph = new Graph();
+        $a = $graph->createVertex(1);
+        $b = $graph->createVertex(2);
+        $c = $graph->createVertex(3);
+        $d = $graph->createVertex(4);
+
+        $a->createEdgeTo($b)->setWeight(5);
+        $a->createEdgeTo($c)->setWeight(8);
+        $b->createEdgeTo($d)->setWeight(9);
+        $b->createEdgeTo($a)->setWeight(1);
+        $c->createEdgeTo($d)->setWeight(4);
+        $c->createEdgeTo($a)->setWeight(1);
+        $d->createEdgeTo($b)->setWeight(3);
+        $d->createEdgeTo($c)->setWeight(9);
+
+        $shortestPath = DynamicPathfinder::operatingIn(AdaptedNetwork::from($graph));
+
+        $this->assertEquals([1, 3, 4], $shortestPath->between('1', '4'));
+        $this->assertEquals([4, 2, 1], $shortestPath->between('4', '1'));
+
+        $shortestPathFromA = $shortestPath->from('1');
+
+        $this->assertCount(3, $shortestPathFromA);
+        $this->assertEquals([1, 2], $shortestPathFromA[2]);
+        $this->assertEquals([1, 3], $shortestPathFromA[3]);
+        $this->assertEquals([1, 3, 4], $shortestPathFromA[4]);
+    }
+
+    /** @test */
     function finding_paths_through_a_simple_directed_graph()
     {
         $graph = new Graph();

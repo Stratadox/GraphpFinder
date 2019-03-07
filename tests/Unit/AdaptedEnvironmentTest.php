@@ -89,4 +89,22 @@ class AdaptedEnvironmentTest extends TestCase
 
         $environment->positionOf('X');
     }
+
+    /** @test */
+    function all_undeclared_dimensions_are_seen_as_zero()
+    {
+        $graph = new Graph();
+        $a = $graph->createVertex('A');
+        $a->setAttribute('x', 10);
+        $a->setAttribute('y', 15);
+        $environment = AdaptedEnvironment::from3D($graph);
+
+        $position = $environment->positionOf('A');
+
+        $this->assertEquals(10, $position[0]);
+        $this->assertEquals(15, $position[1]);
+        $this->assertEquals(0, $position[2]);
+        $this->assertEquals(0, $position[3]);
+        $this->assertEquals(0, $position[391]);
+    }
 }
