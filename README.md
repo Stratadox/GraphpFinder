@@ -1,4 +1,4 @@
-#GraphpFinder
+# GraphpFinder
 An adapter to make [Graphp](https://github.com/graphp/graph) compatible with 
 [Pathfinder](https://github.com/Stratadox/Pathfinder).
 
