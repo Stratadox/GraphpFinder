@@ -2,6 +2,10 @@
 An adapter to make [Graphp](https://github.com/graphp/graph) compatible with 
 [Pathfinder](https://github.com/Stratadox/Pathfinder).
 
+[![Build Status](https://travis-ci.org/Stratadox/GraphpFinder.svg?branch=master)](https://travis-ci.org/Stratadox/GraphpFinder)
+[![Coverage Status](https://coveralls.io/repos/github/Stratadox/GraphpFinder/badge.svg?branch=master)](https://coveralls.io/github/Stratadox/GraphpFinder?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Stratadox/GraphpFinder/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Stratadox/GraphpFinder/?branch=master)
+
 ## Installation
 Install with `composer require stratadox/graphp-finder`
 
