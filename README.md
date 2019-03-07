@@ -29,7 +29,7 @@ least the keys `x` and `y` to be present, also using `z` when available.
 ## Examples
 ### Environment without GraphpFinder
 The "normal" way to use the [Pathfinder](https://github.com/Stratadox/Pathfinder) 
-module looks like this:
+module looks somewhat like this:
 
 ```php
 <?php
@@ -152,4 +152,45 @@ When you've already got a Graphp graph, using `AdaptedEnvironment::from($graph)`
 is a lot shorter, faster and less cumbersome than creating and maintaining an 
 extra copy of your entire graph just for the pathfinder.
 
+### 3D environment with GraphpFinder
+Three dimensional coordinates are equally supported:
+```php
+<?php
+use Fhaculty\Graph\Graph;
+use Stratadox\GraphpFinder\AdaptedEnvironment;
+use Stratadox\Pathfinder\Distance\Euclidean;
+use Stratadox\Pathfinder\DynamicPathfinder;
+use Stratadox\Pathfinder\Estimate\Estimate;
 
+$graph = new Graph();
+$a = $graph->createVertex('A');
+$a->setAttribute('x', 0);
+$a->setAttribute('y', 0);
+$a->setAttribute('z', 0);
+$b = $graph->createVertex('B');
+$b->setAttribute('x', 2);
+$b->setAttribute('y', 5);
+$b->setAttribute('z', 4);
+$c = $graph->createVertex('C');
+$c->setAttribute('x', 8);
+$c->setAttribute('y', -1);
+$c->setAttribute('z', 0.5);
+$d = $graph->createVertex('D');
+$d->setAttribute('x', 9);
+$d->setAttribute('y', 5);
+$d->setAttribute('z', 1);
+
+$a->createEdge($b)->setWeight(6);
+$a->createEdge($c)->setWeight(8);
+$b->createEdge($d)->setWeight(9);
+$c->createEdge($d)->setWeight(4);
+
+$shortestPath = DynamicPathfinder::withHeuristic(
+    Estimate::costAs(
+        Euclidean::inDimensions(3), 
+        AdaptedEnvironment::from3D($graph)
+    )
+);
+
+assert(['A', 'C', 'D'] === $shortestPath->between('A', 'D'));
+```
